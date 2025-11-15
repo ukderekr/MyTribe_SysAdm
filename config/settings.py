@@ -26,7 +26,12 @@ SECRET_KEY = 'django-insecure-abocb4cy-gw$c@zjs(3)hrigpvc_(ksvt2e(v$0v9+p$j6*07i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    "0.0.0.0",
+    '*'
+]
 
 
 # Application definition
@@ -119,6 +124,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
@@ -126,11 +132,18 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20
 }
 
+# settings.py
+AUTHENTICATION_BACKENDS = [
+    'mytribe.backends.EmailBackend',  # Add this
+    'django.contrib.auth.backends.ModelBackend',  # Keep the default
+]
+
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173", # The address of your React frontend dev server
     "http://127.0.0.1:5173",
 ]
+CORS_ALLOW_CREDENTIALS = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

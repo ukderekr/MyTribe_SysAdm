@@ -24,17 +24,63 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 class UserSerializer(serializers.ModelSerializer):
+    profile_picture_url = serializers.SerializerMethodField()
+    cover_photo_url = serializers.SerializerMethodField()
+    membership_tier_id = serializers.SerializerMethodField()
+    
     class Meta:
         model = CustomUser
         fields = ('id', 'username', 'email', 'first_name', 'last_name', 
-                 'profile_picture', 'role', 'membership_tier', 'date_joined')
-
+                 'profile_picture', 'cover_photo', 'bio', 'address', 
+                 'phone', 'age', 'gender', 'location', 'membership_tier',
+                 'profile_picture_url', 'cover_photo_url', 'membership_tier_id')
+    
+    def get_profile_picture_url(self, obj):
+        if obj.profile_picture:
+            return obj.profile_picture.url
+        return None
+    
+    def get_cover_photo_url(self, obj):
+        if obj.cover_photo:
+            return obj.cover_photo.url
+        return None
+    
+    def get_membership_tier_id(self, obj):
+        if obj.membership_tier:
+            return obj.membership_tier.id
+        return None
+    
 class UserProfileSerializer(serializers.ModelSerializer):
+    profile_picture_url = serializers.SerializerMethodField()
+    cover_photo_url = serializers.SerializerMethodField()
+    membership_tier_id = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
+    
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'first_name', 'last_name', 
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'name',
                  'profile_picture', 'cover_photo', 'bio', 'address', 
-                 'phone', 'age', 'gender', 'location')
+                 'phone', 'age', 'gender', 'location', 'membership_tier',
+                 'profile_picture_url', 'cover_photo_url', 'membership_tier_id')
+        read_only_fields = ('username', 'email')  # These shouldn't be changed via profile update
+    
+    def get_profile_picture_url(self, obj):
+        if obj.profile_picture:
+            return obj.profile_picture.url
+        return None
+    
+    def get_cover_photo_url(self, obj):
+        if obj.cover_photo:
+            return obj.cover_photo.url
+        return None
+    
+    def get_membership_tier_id(self, obj):
+        if obj.membership_tier:
+            return obj.membership_tier.id
+        return None
+    
+    def get_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
 
 class UserAdminSerializer(serializers.ModelSerializer):
     class Meta:

@@ -2,6 +2,7 @@
 
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import TokenRefreshView
 from . import views
 
 router = DefaultRouter()
@@ -63,6 +64,8 @@ urlpatterns += [
     path('api/v1/settings/membership-tiers/', 
          views.MembershipTierViewSet.as_view({'get': 'list'}), 
          name='membership-tiers-list'),
+
+    path('api/v1/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 # User Authentication & Profile Management
